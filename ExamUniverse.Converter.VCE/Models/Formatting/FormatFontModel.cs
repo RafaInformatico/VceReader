@@ -1,14 +1,13 @@
 ﻿using ExamUniverse.Converter.VCE.Enums;
 
-namespace ExamUniverse.Converter.VCE.Models.Formatting
+namespace ExamUniverse.Converter.VCE.Models.Formatting;
+
+/// <summary>
+///     Format font model
+/// </summary>
+public class FormatFontModel
 {
-    /// <summary>
-    ///     Format font model
-    /// </summary>
-    public class FormatFontModel
-    {
-        public FormatFontType Type { get; set; }
-        public string Start { get; set; }
-        public string End { get; set; }
-    }
+    public FormatFontType Type { get; init; }
+    public string Start { get; init; }
+    public string End { get; init; }
 }

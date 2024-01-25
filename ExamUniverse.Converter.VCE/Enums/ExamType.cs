@@ -1,11 +1,10 @@
-﻿namespace ExamUniverse.Converter.VCE.Enums
+﻿namespace ExamUniverse.Converter.VCE.Enums;
+
+/// <summary>
+///     Exam type
+/// </summary>
+public enum ExamType
 {
-    /// <summary>
-    ///     Exam type
-    /// </summary>
-    public enum ExamType
-    {
-        Question,
-        Section
-    }
+    Question,
+    Section
 }

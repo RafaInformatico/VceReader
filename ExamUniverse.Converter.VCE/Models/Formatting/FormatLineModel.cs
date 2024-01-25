@@ -1,14 +1,13 @@
 ﻿using ExamUniverse.Converter.VCE.Enums;
 
-namespace ExamUniverse.Converter.VCE.Models.Formatting
+namespace ExamUniverse.Converter.VCE.Models.Formatting;
+
+/// <summary>
+///     Format line model
+/// </summary>
+public class FormatLineModel
 {
-    /// <summary>
-    ///     Format line model
-    /// </summary>
-    public class FormatLineModel
-    {
-        public FormatLineType Type { get; set; }
-        public string Start { get; set; }
-        public string End { get; set; }
-    }
+    public FormatLineType Type { get; init; }
+    public string Start { get; init; }
+    public string End { get; init; }
 }

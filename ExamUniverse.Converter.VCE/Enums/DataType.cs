@@ -1,12 +1,11 @@
-﻿namespace ExamUniverse.Converter.VCE.Enums
+﻿namespace ExamUniverse.Converter.VCE.Enums;
+
+/// <summary>
+///     Data type
+/// </summary>
+public enum DataType
 {
-    /// <summary>
-    ///     Data type
-    /// </summary>
-    public enum DataType
-    {
-        Text,
-        Format,
-        Image
-    }
+    Text,
+    Format,
+    Image
 }
