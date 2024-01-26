@@ -15,7 +15,7 @@ public class Separator
     public Separator(byte[] data, byte[] splitter)
     {
         _bytes = data;
-        _splitters = new[] { splitter };
+        _splitters = [splitter];
     }
 
     public Separator(byte[] data, byte[][] splitters)

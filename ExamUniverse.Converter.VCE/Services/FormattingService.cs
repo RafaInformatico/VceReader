@@ -22,202 +22,230 @@ namespace ExamUniverse.Converter.VCE.Services;
 /// </summary>
 public class FormattingService : IFormattingService
 {
-    private readonly List<FormatFontModel> _formatFonts = new()
-    {
+    private readonly List<FormatFontModel> _formatFonts =
+    [
         new FormatFontModel
         {
             Type = FormatFontType.Default,
             Start = "",
             End = ""
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.Bold,
             Start = "<b>",
             End = "</b>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.Monospaced,
             Start = "<span style=\"font-family: Courier, monospace\">",
             End = "</span>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.MonospacedBold,
             Start = "<span style=\"font-family: Courier, monospace\"><b>",
             End = "</b></span>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.LargeBold,
             Start = "<span style=\"font-size: large\"><b>",
             End = "</b></span>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.Underline,
             Start = "<u>",
             End = "</u>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.Italic,
             Start = "<i>",
             End = "</i>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.UnderlineHyperlink,
             Start = "<u><a href=\"UrlData\">UrlData",
             End = "</a></u>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.BoldUnderline,
             Start = "<b><u>",
             End = "</u></b>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.Small,
             Start = "<span style=\"font-size: small\">",
             End = "</span>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.Large,
             Start = "<span style=\"font-size: large\">",
             End = "</span>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.Hyperlink,
             Start = "<a href=\"UrlData\">UrlData",
             End = "</a>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.ItalicHyperlink,
             Start = "<i><a href=\"UrlData\">UrlData",
             End = "</a></i>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.BoldHyperlink,
             Start = "<b><a href=\"UrlData\">UrlData",
             End = "</a></b>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.BoldItalicHyperlink,
             Start = "<b><i><a href=\"UrlData\">UrlData",
             End = "</a><i></b>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.BoldItalicUnderlineHyperlink,
             Start = "<b><i><u><a href=\"UrlData\">UrlData",
             End = "</a></u><i></b>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.BoldItalic,
             Start = "<b><i>",
             End = "</i></b>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.BoldItalicUnderline,
             Start = "<b><i><u>",
             End = "</u></i></b>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.MonospacedSmall,
             Start = "<span style=\"font-family: Courier, monospace; font-size: small\">",
             End = "</span>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.MonospacedLarge,
             Start = "<span style=\"font-family: Courier, monospace; font-size: large\">",
             End = "</span>"
         },
+
         new FormatFontModel
         {
             Type = FormatFontType.Italic,
             Start = "<i><u>",
             End = "</u></i>"
         }
-    };
+    ];
 
     private const string FormatLine = "<br>";
 
-    private readonly List<FormatLineModel> _formatLines = new()
-    {
+    private readonly List<FormatLineModel> _formatLines =
+    [
         new FormatLineModel
         {
             Type = FormatLineType.Delete,
             Start = "",
             End = ""
         },
+
         new FormatLineModel
         {
             Type = FormatLineType.Left,
             Start = "",
             End = ""
         },
+
         new FormatLineModel() // TODO az-102
         {
             Type = FormatLineType.SubParagraph,
             Start = "",
             End = ""
         },
+
         new FormatLineModel
         {
             Type = FormatLineType.Center,
             Start = "<div style=\"text-align: center\">",
             End = "</div>"
         },
+
         new FormatLineModel
         {
             Type = FormatLineType.Right,
             Start = "<div style=\"text-align: right\">",
             End = "</div>"
         },
+
         new FormatLineModel
         {
             Type = FormatLineType.Justify,
             Start = "<div style=\"text-align: justify\">",
             End = "</div>"
         },
+
         new FormatLineModel() // TODO az-304 microsoft.az-304.v2021-05-18.by.sienna.102q.eudump
         {
             Type = FormatLineType.NextLine,
             Start = "",
             End = ""
         },
+
         new FormatLineModel() // TODO AZ-400 microsoft.az-400.v2021-03-26.by.georgia.165q.eudump
         {
             Type = FormatLineType.NewUi,
             Start = "",
             End = ""
         },
+
         new FormatLineModel() // TODO AZ-400 microsoft.az-400.v2021-03-26.by.georgia.165q.eudump
         {
             Type = FormatLineType.NewUi2,
             Start = "",
             End = ""
         }
-    };
-    private readonly List<string> _formatPatterns = new()
-    {
-        @"^(-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+) ("".*"")$",
+    ];
+    private readonly List<string> _formatPatterns =
+    [
+        """^(-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+) (".*")$""",
         @"^(-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+)$",
         @"^(-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+)$",
         @"^(-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+) (-?\d+)$"
-    };
+    ];
 
     // TODO az-102
     // TODO az-304 microsoft.az-304.v2021-05-18.by.sienna.102q.eudump
@@ -232,7 +260,7 @@ public class FormattingService : IFormattingService
     /// <param name="variantsCount"></param>
     public void FormattingExamQuestion(ExamQuestionModel examQuestionModel, byte[] question, int variantsCount)
     {
-        byte[] splitter = { 0x2d, 0x38, 0x20, 0x31, 0x20, 0x33, 0x20, 0x31 };
+        byte[] splitter = [0x2d, 0x38, 0x20, 0x31, 0x20, 0x33, 0x20, 0x31];
         var separator = new Separator(question, splitter);
 
         separator.Pop();
@@ -286,7 +314,7 @@ public class FormattingService : IFormattingService
     /// <param name="question"></param>
     public void FormattingExamQuestionArea(ExamQuestionModel examQuestionModel, byte[] question)
     {
-        var splitter = new byte[] { 0x2d, 0x38, 0x20, 0x31, 0x20, 0x33, 0x20, 0x31 };
+        var splitter = "-8 1 3 1"u8.ToArray();
         var separator = new Separator(question, splitter);
 
         separator.Pop();
@@ -326,7 +354,7 @@ public class FormattingService : IFormattingService
     /// <param name="question"></param>
     public void FormattingExamQuestionBlock(ExamQuestionModel examQuestionModel, byte[] question)
     {
-        byte[] splitter = { 0x2d, 0x38, 0x20, 0x31, 0x20, 0x33, 0x20, 0x31 };
+        byte[] splitter = [0x2d, 0x38, 0x20, 0x31, 0x20, 0x33, 0x20, 0x31];
         var separator = new Separator(question, splitter);
 
         separator.Pop();
@@ -367,7 +395,7 @@ public class FormattingService : IFormattingService
     public void FormattingExamQuestionAreaImage(ExamQuestionModel examQuestionModel, byte[] image)
     {
         var imageBase64 = Convert.ToBase64String(image, 0, image.Length);
-        examQuestionModel.AreaImage = "<img src=\"data:image;base64," + imageBase64 + "\" >";
+        examQuestionModel.AreaImage = $"<img src=\"data:image;base64,{imageBase64}\" >";
     }
 
     /// <summary>
@@ -415,7 +443,7 @@ public class FormattingService : IFormattingService
         for (var i = 0; i < count; i++)
         {
             var type = binaryReader.ReadByte();
-            examQuestionModel.DranAndDropTypes.Add(type);
+            examQuestionModel.DragAndDropTypes.Add(type);
 
             binaryReader.ReadInt32();
 
@@ -450,7 +478,7 @@ public class FormattingService : IFormattingService
                     }
 
                     var imageBase64 = Convert.ToBase64String(imageCroppedBytes, 0, imageCroppedBytes.Length);
-                    var imageHtml = "<img src=\"data:image;base64," + imageBase64 + "\" >";
+                    var imageHtml = $"<img src=\"data:image;base64,{imageBase64}\" >";
 
                     examQuestionModel.DragAreasCount += 1;
                     examQuestionModel.DragAreas.Add(new DragAndDropAreaModel
@@ -484,7 +512,7 @@ public class FormattingService : IFormattingService
     /// </summary>
     /// <param name="examQuestionModel"></param>
     /// <param name="answers"></param>
-    public void FormattingExamQuestionAnswers(ExamQuestionModel examQuestionModel, byte[] answers)
+    public void FormattingExamQuestionAnswers(ExamQuestionModel examQuestionModel, IEnumerable<byte> answers)
     {
         examQuestionModel.Answers = answers.GetStringWithReplaced();
     }
@@ -545,7 +573,7 @@ public class FormattingService : IFormattingService
                 continue;
             }
 
-            switch (examQuestionModel.DranAndDropTypes[index])
+            switch (examQuestionModel.DragAndDropTypes[index])
             {
                 case 1:
                     index += 1;
@@ -560,7 +588,7 @@ public class FormattingService : IFormattingService
             }
         }
 
-        if (examQuestionModel.DranAndDropTypes.Count - index > 0)
+        if (examQuestionModel.DragAndDropTypes.Count - index > 0)
         {
             var exceptNumbers = dropNumbers.Except(dragNumbers).ToList();
             dragNumbers.AddRange(exceptNumbers);
@@ -598,10 +626,10 @@ public class FormattingService : IFormattingService
     public void FormattingExamQuestionBlockAnswers(ExamQuestionModel examQuestionModel, byte[] answers,
         int answersCount)
     {
-        byte[] splitter = { 0x02, 0x07 };
+        byte[] splitter = [0x02, 0x07];
         var separator = new Separator(answers, splitter);
 
-        var answersList = new List<string>();
+        var answersList = new List<string?>();
 
         separator.Pop();
 
@@ -628,7 +656,7 @@ public class FormattingService : IFormattingService
     /// <param name="description"></param>
     public void FormattingDescription(ExamSectionModel examSectionModel, byte[] description)
     {
-        byte[] splitter = { 0x2d, 0x38, 0x20, 0x31, 0x20, 0x33, 0x20, 0x31 };
+        byte[] splitter = [0x2d, 0x38, 0x20, 0x31, 0x20, 0x33, 0x20, 0x31];
         var separator = new Separator(description, splitter);
 
         if (separator.Peek().SequenceEqual(splitter))
@@ -649,13 +677,13 @@ public class FormattingService : IFormattingService
     /// <returns></returns>
     private string FormatText(byte[] bytes)
     {
-        byte[] splitterBlock = { 0x0d, 0x0a };
-        byte[] splitterLine = { 0x29, 0x20 };
+        byte[] splitterBlock = [0x0d, 0x0a];
+        byte[] splitterLine = [0x29, 0x20];
 
-        var separator = new Separator(bytes, new[] { splitterBlock, splitterLine });
+        var separator = new Separator(bytes, [splitterBlock, splitterLine]);
         var dataArray = GetDataBySplitters(separator, splitterBlock, splitterLine);
 
-        var resultString = new List<string>();
+        var resultString = new List<string?>();
 
         var formatLineEnd = "";
 
@@ -725,12 +753,10 @@ public class FormattingService : IFormattingService
 
                             resultString.Add(formatTextEnd);
 
-                            if (formatText != null)
+                            if (formatText?.Start != null)
                             {
-                                var formatTextStart = formatText.Start;
                                 formatTextEnd = formatText.End;
-
-                                resultString.Add(formatTextStart.Replace("UrlData", url));
+                                resultString.Add(formatText.Start.Replace("UrlData", url));
                             }
 
                             break;
@@ -749,16 +775,15 @@ public class FormattingService : IFormattingService
                 }
                 case DataType.Image:
                 {
-                    var imageWidth = data.Property1 != null
-                        ? data.Property1.GetStringWithReplaced().Replace("=", "=\"") + "\""
-                        : "";
-                    var imageHeight = data.Property2 != null
-                        ? data.Property1.GetStringWithReplaced().Replace("=", "=\"") + "\""
-                        : "";
+                    var imageWidth = $"{data.Property1.GetStringWithReplaced().Replace("=", "=\"")}\"";
+                    var imageHeight = $"{data.Property1.GetStringWithReplaced().Replace("=", "=\"")}\"";
 
-                    var imageBase64 = Convert.ToBase64String(data.Data, 0, data.Data.Length);
-                    resultString.Add("<img src=\"data:image;base64," + imageBase64 + "\" " + imageWidth + " " +
-                                     imageHeight + " >");
+                    if (data.Data != null)
+                    {
+                        var imageBase64 = Convert.ToBase64String(data.Data, 0, data.Data.Length);
+                        resultString.Add($"<img src=\"data:image;base64,{imageBase64}\" {imageWidth} {imageHeight} >");
+                    }
+
                     break;
                 }
                 default:
@@ -877,10 +902,12 @@ public class FormattingService : IFormattingService
     /// </summary>
     /// <param name="content"></param>
     /// <returns></returns>
-    private List<string> SplitStringByPatterns(string content)
+    private List<string> SplitStringByPatterns(string? content)
     {
         var results = new List<string>();
 
+        if (content is null) return results;
+        
         foreach (var matches in _formatPatterns.Select(t => Regex.Match(content, t)).Select(matches => matches))
         {
             var match = matches;

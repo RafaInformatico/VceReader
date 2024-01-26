@@ -8,20 +8,14 @@ namespace ExamUniverse.Converter.VCE.Models.FileReader;
 /// </summary>
 public class ExamModel
 {
-    public ExamModel()
-    {
-        ExamSections = new List<ExamSectionModel>();
-        ExamQuestions = new List<ExamQuestionModel>();
-    }
-
     public int Id { get; set; }
 
     public ExamType Type { get; init; }
-    public string Name { get; set; }
+    public string? Name { get; init; }
 
     public int ExamSectionsCount { get; set; }
-    public List<ExamSectionModel> ExamSections { get; }
+    public List<ExamSectionModel> ExamSections { get; } = [];
 
     public int ExamQuestionsCount { get; set; }
-    public List<ExamQuestionModel> ExamQuestions { get; }
+    public List<ExamQuestionModel> ExamQuestions { get; } = [];
 }

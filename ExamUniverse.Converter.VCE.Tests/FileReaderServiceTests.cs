@@ -13,8 +13,8 @@ namespace ExamUniverse.Converter.VCE.Tests;
 [TestClass]
 public class FileReaderServiceTests
 {
-    private readonly IFileReaderService _fileReaderService = new FileReaderService(new FormattingService());
-
+    private IFileReaderService readerService = new FileReaderService(new FormattingService());
+    
     [TestMethod]
     public void Test_Version_61_1()
     {
@@ -332,6 +332,6 @@ public class FileReaderServiceTests
         var encryptKeys = Convert.FromBase64String(encryptKeysString);
         var decryptKeys = Convert.FromBase64String(decryptKeysString);
 
-        return _fileReaderService.ReadFile(file, encryptKeys, decryptKeys);
+        return readerService.ReadFile(file, encryptKeys, decryptKeys);
     }
 }

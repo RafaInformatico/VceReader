@@ -16,27 +16,27 @@ public class ExamQuestionModel
     public int SectionId { get; set; }
     public int Complexity { get; set; }
 
-    public string Question { get; set; }
+    public string? Question { get; set; }
 
     public int VariantsCount { get; set; }
-    public List<string> Variants { get; } = new();
+    public List<string> Variants { get; } = [];
 
-    public string AreaImage { get; set; }
+    public string? AreaImage { get; set; }
 
     public int HotAreasCount { get; set; }
-    public List<HotAreaModel> HotAreas { get; } = new();
+    public List<HotAreaModel> HotAreas { get; } = [];
 
-    public List<byte> DranAndDropTypes { get; } = new();
+    public List<byte> DragAndDropTypes { get; } = [];
 
     public int DragAreasCount { get; set; }
-    public List<DragAndDropAreaModel> DragAreas { get; } = new();
+    public List<DragAndDropAreaModel> DragAreas { get; } = [];
 
     public int DropAreasCount { get; set; }
-    public List<DragAndDropAreaModel> DropAreas { get; } = new();
+    public List<DragAndDropAreaModel> DropAreas { get; } = [];
 
-    public string Reference { get; set; }
-    public string Answers { get; set; }
+    public string? Reference { get; set; }
+    public string? Answers { get; set; }
 
     public int BlockAnswersCount { get; set; }
-    public List<string> BlockAnswers { get; set; } = new();
+    public List<string?> BlockAnswers { get; set; } = [];
 }
