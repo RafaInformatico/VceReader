@@ -1,4 +1,5 @@
-﻿using ExamUniverse.Converter.VCE.Models.FileReader;
+﻿using System.Collections.Generic;
+using ExamUniverse.Converter.VCE.Models.FileReader;
 
 namespace ExamUniverse.Converter.VCE.Services.Interfaces;
 
@@ -57,7 +58,7 @@ public interface IFormattingService
     /// </summary>
     /// <param name="examQuestionModel"></param>
     /// <param name="answers"></param>
-    void FormattingExamQuestionAnswers(ExamQuestionModel examQuestionModel, byte[] answers);
+    void FormattingExamQuestionAnswers(ExamQuestionModel examQuestionModel, IEnumerable<byte> answers);
 
     /// <summary>
     ///     Formatting exam question hot area answers

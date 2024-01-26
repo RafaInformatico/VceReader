@@ -8,6 +8,6 @@ namespace ExamUniverse.Converter.VCE.Models.Formatting;
 public class FormatFontModel
 {
     public FormatFontType Type { get; init; }
-    public string Start { get; init; }
-    public string End { get; init; }
+    public string? Start { get; init; }
+    public string? End { get; init; }
 }

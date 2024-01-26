@@ -7,9 +7,9 @@ namespace ExamUniverse.Converter.VCE.Models.Formatting;
 /// </summary>
 public class DataModel
 {
-    public byte[] Data { get; init; }
+    public byte[]? Data { get; init; }
     public DataType Type { get; init; }
 
-    public byte[] Property1 { get; init; }
-    public byte[] Property2 { get; init; }
+    public byte[]? Property1 { get; init; }
+    public byte[]? Property2 { get; init; }
 }

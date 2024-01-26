@@ -9,13 +9,13 @@ namespace ExamUniverse.Converter.VCE.Utilities;
 /// </summary>
 public class Separator
 {
-    private byte[] _bytes;
     private readonly byte[][] _splitters;
+    private byte[] _bytes;
 
     public Separator(byte[] data, byte[] splitter)
     {
         _bytes = data;
-        _splitters = new[] { splitter };
+        _splitters = [splitter];
     }
 
     public Separator(byte[] data, byte[][] splitters)
@@ -94,18 +94,13 @@ public class Separator
     private byte[] GetPatternBytes()
     {
         for (var i = 0; i < _bytes.Length; i++)
-        {
             foreach (var t in _splitters)
             {
-                if (!IsMatch(_bytes, i, t))
-                {
-                    continue;
-                }
+                if (!IsMatch(_bytes, i, t)) continue;
 
                 var count = i == 0 ? t.Length : i;
                 return _bytes.Take(count).ToArray();
             }
-        }
 
         return _bytes.Take(_bytes.Length).ToArray();
     }
@@ -119,10 +114,7 @@ public class Separator
     /// <returns></returns>
     private static bool IsMatch(IReadOnlyList<byte> bytes, int position, IReadOnlyCollection<byte> pattern)
     {
-        if (pattern.Count > bytes.Count - position)
-        {
-            return false;
-        }
+        if (pattern.Count > bytes.Count - position) return false;
 
         return !pattern.Where((t, i) => bytes[position + i] != t).Any();
     }

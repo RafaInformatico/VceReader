@@ -13,10 +13,7 @@ public static class StringExtension
     /// <returns></returns>
     public static string TrimStart(this string target, string trimString)
     {
-        if (string.IsNullOrEmpty(trimString))
-        {
-            return target;
-        }
+        if (string.IsNullOrEmpty(trimString)) return target;
 
         var result = target;
 
@@ -33,10 +30,7 @@ public static class StringExtension
     /// <returns></returns>
     public static string TrimEnd(this string target, string trimString)
     {
-        if (string.IsNullOrEmpty(trimString))
-        {
-            return target;
-        }
+        if (string.IsNullOrEmpty(trimString)) return target;
 
         var result = target;
 

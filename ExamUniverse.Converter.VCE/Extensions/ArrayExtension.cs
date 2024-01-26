@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -14,9 +15,9 @@ public static class ArrayExtension
     /// </summary>
     /// <param name="bytes"></param>
     /// <returns></returns>
-    public static string GetString(this IEnumerable<byte> bytes)
+    public static string GetString(this IEnumerable<byte>? bytes)
     {
-        return Encoding.UTF8.GetString(bytes.Where(b => !char.IsControl((char)b)).ToArray());
+        return Encoding.UTF8.GetString((bytes ?? Array.Empty<byte>()).Where(b => !char.IsControl((char)b)).ToArray());
     }
 
     /// <summary>
@@ -24,7 +25,7 @@ public static class ArrayExtension
     /// </summary>
     /// <param name="bytes"></param>
     /// <returns></returns>
-    public static string GetStringWithReplaced(this IEnumerable<byte> bytes)
+    public static string GetStringWithReplaced(this IEnumerable<byte>? bytes)
     {
         return bytes.GetString().Replace("\0", "");
     }

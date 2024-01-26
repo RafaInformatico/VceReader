@@ -13,15 +13,8 @@ namespace ExamUniverse.Converter.VCE.Services;
 /// <summary>
 ///     File reader service
 /// </summary>
-public class FileReaderService : IFileReaderService
+public class FileReaderService(IFormattingService formattingService) : IFileReaderService
 {
-    private readonly IFormattingService _formattingService;
-
-    public FileReaderService(IFormattingService formattingService)
-    {
-        _formattingService = formattingService;
-    }
-
     /// <summary>
     ///     Read file
     /// </summary>
@@ -42,10 +35,7 @@ public class FileReaderService : IFileReaderService
         var headerSecondByte = binaryReader.ReadByte();
 
         // Check header bytes
-        if (headerFirstByte != 0x85 || headerSecondByte != 0xA8)
-        {
-            throw new Exception("Invalid file format");
-        }
+        if (headerFirstByte != 0x85 || headerSecondByte != 0xA8) throw new Exception("Invalid file format");
 
         #region Read version
 
@@ -164,10 +154,7 @@ public class FileReaderService : IFileReaderService
         // File length
         var fileLength = binaryReader.ReadInt32();
 
-        if (binaryReader.BaseStream.Length != fileLength)
-        {
-            throw new Exception("Invalid file format");
-        }
+        if (binaryReader.BaseStream.Length != fileLength) throw new Exception("Invalid file format");
 
         return fileModel;
     }
@@ -191,10 +178,7 @@ public class FileReaderService : IFileReaderService
                 ExamSectionId = examSectionId
             };
 
-            if (fileModel.Version >= 61)
-            {
-                GetArrayLength(binaryReader);
-            }
+            if (fileModel.Version >= 61) GetArrayLength(binaryReader);
 
             ReadDecryptArray(binaryReader, fileModel);
 
@@ -221,9 +205,9 @@ public class FileReaderService : IFileReaderService
 
                     ReadDecryptArray(binaryReader, fileModel);
 
-                    _formattingService.FormattingExamQuestion(examQuestionModel, questionBytes,
+                    formattingService.FormattingExamQuestion(examQuestionModel, questionBytes,
                         examQuestionModel.VariantsCount);
-                    _formattingService.FormattingExamQuestionAnswers(examQuestionModel, answersBytes);
+                    formattingService.FormattingExamQuestionAnswers(examQuestionModel, answersBytes);
                     break;
                 }
                 case ExamQuestionType.HotArea:
@@ -237,10 +221,10 @@ public class FileReaderService : IFileReaderService
 
                     var image = ReadDecryptArray(binaryReader, fileModel);
 
-                    _formattingService.FormattingExamQuestionArea(examQuestionModel, questionBytes);
-                    _formattingService.FormattingExamQuestionAreaImage(examQuestionModel, image);
-                    _formattingService.FormattingExamQuestionHotAreaVariants(examQuestionModel, variantsBytes);
-                    _formattingService.FormattingExamQuestionHotAreaAnswers(examQuestionModel, answersBytes);
+                    formattingService.FormattingExamQuestionArea(examQuestionModel, questionBytes);
+                    formattingService.FormattingExamQuestionAreaImage(examQuestionModel, image);
+                    formattingService.FormattingExamQuestionHotAreaVariants(examQuestionModel, variantsBytes);
+                    formattingService.FormattingExamQuestionHotAreaAnswers(examQuestionModel, answersBytes);
                     break;
                 }
                 case ExamQuestionType.DragAndDrop:
@@ -254,11 +238,11 @@ public class FileReaderService : IFileReaderService
 
                     var image = ReadDecryptArray(binaryReader, fileModel);
 
-                    _formattingService.FormattingExamQuestionArea(examQuestionModel, questionBytes);
-                    _formattingService.FormattingExamQuestionAreaImage(examQuestionModel, image);
-                    _formattingService.FormattingExamQuestionDragAndDropAreaVariants(examQuestionModel, variantsBytes,
+                    formattingService.FormattingExamQuestionArea(examQuestionModel, questionBytes);
+                    formattingService.FormattingExamQuestionAreaImage(examQuestionModel, image);
+                    formattingService.FormattingExamQuestionDragAndDropAreaVariants(examQuestionModel, variantsBytes,
                         image);
-                    _formattingService.FormattingExamQuestionDragAndDropAreaAnswers(examQuestionModel, answersBytes);
+                    formattingService.FormattingExamQuestionDragAndDropAreaAnswers(examQuestionModel, answersBytes);
                     break;
                 }
                 case ExamQuestionType.FillInTheBlank:
@@ -272,8 +256,8 @@ public class FileReaderService : IFileReaderService
                     binaryReader.ReadByte();
                     binaryReader.ReadByte();
 
-                    _formattingService.FormattingExamQuestionBlock(examQuestionModel, questionBytes);
-                    _formattingService.FormattingExamQuestionBlockAnswers(examQuestionModel, answersBytes, answersCount);
+                    formattingService.FormattingExamQuestionBlock(examQuestionModel, questionBytes);
+                    formattingService.FormattingExamQuestionBlockAnswers(examQuestionModel, answersBytes, answersCount);
                     break;
                 }
                 default:
@@ -304,9 +288,7 @@ public class FileReaderService : IFileReaderService
             };
 
             if (!Enum.IsDefined(typeof(ExamSectionType), examSectionModel.Type))
-            {
                 throw new Exception("Exam section type not found");
-            }
 
             examSectionModel.TimeLimit = binaryReader.ReadInt32();
 
@@ -327,7 +309,7 @@ public class FileReaderService : IFileReaderService
                     ReadDecryptArray(binaryReader, fileModel).GetString();
 
                     var descriptionBytes = ReadDecryptArray(binaryReader, fileModel);
-                    _formattingService.FormattingDescription(examSectionModel, descriptionBytes);
+                    formattingService.FormattingDescription(examSectionModel, descriptionBytes);
 
                     binaryReader.ReadInt32();
 
@@ -365,31 +347,23 @@ public class FileReaderService : IFileReaderService
     {
         var messageLen = GetArrayLength(binaryReader);
 
-        if (messageLen == 0)
-        {
-            return Array.Empty<byte>();
-        }
+        if (messageLen == 0) return Array.Empty<byte>();
 
         messageLen -= 1;
 
-        byte[] selectedKey;
+        byte[]? selectedKey;
         var slectKey = binaryReader.ReadByte();
 
         if (slectKey < 0x80)
         {
-            if (fileModel.Keys == null || fileModel.Keys.Length == 0)
-            {
-                throw new Exception("Key cannot be empty");
-            }
+            if (fileModel.Keys == null || fileModel.Keys.Length == 0) throw new Exception("Key cannot be empty");
 
             selectedKey = fileModel.Keys;
         }
         else
         {
             if (fileModel.DecryptKeys == null || fileModel.DecryptKeys.Length == 0)
-            {
                 throw new Exception("Key cannot be empty");
-            }
 
             selectedKey = fileModel.DecryptKeys;
         }

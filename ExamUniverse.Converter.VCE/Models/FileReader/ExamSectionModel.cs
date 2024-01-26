@@ -12,6 +12,6 @@ public class ExamSectionModel
     public ExamSectionType Type { get; init; }
     public int TimeLimit { get; set; }
 
-    public string Title { get; set; }
-    public string Description { get; set; }
+    public string? Title { get; set; }
+    public string? Description { get; set; }
 }
